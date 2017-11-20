@@ -1,4 +1,4 @@
-package lean
+package main
 
 type Transaction struct {
 	Output string

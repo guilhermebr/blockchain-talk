@@ -1,6 +1,7 @@
-package lean
+package main
 
 import (
+	"fmt"
 	"time"
 )
 
@@ -14,11 +15,6 @@ type Block struct {
 }
 
 func NewBlock(txs []Transaction, prevBlockHash []byte) *Block {
-	txs = append(txs, Transaction{
-		Output: "reward payment",
-		Input:  "satoshi",
-		Value:  50,
-	})
 	block := &Block{
 		Timestamp:    time.Unix(time.Now().Unix(), 0),
 		PrevBlock:    prevBlockHash,
@@ -27,5 +23,9 @@ func NewBlock(txs []Transaction, prevBlockHash []byte) *Block {
 		Bits:         getTargetBits(),
 		Nonce:        1,
 	}
+	fmt.Printf("Prev. hash: %x\n", block.PrevBlock)
+	fmt.Printf("Transactions: %v\n", block.Transactions)
+	block.PoW()
+	fmt.Println()
 	return block
 }

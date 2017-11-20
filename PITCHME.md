@@ -19,7 +19,7 @@ Bitcoin is a Peer-to-Peer Electronic Cash System that uses a peer-to-peer networ
 
 ![Blockchain as Math](assets/RRPVcDr.png)
 
-+++
+---
 
 ### The world-famous Blockchain
 
@@ -53,7 +53,7 @@ Cash is peer-to-peer, but it is not electronic, and it is a Central Bank liabili
 
 Commercial bank deposits are a liability of the bank that issues them.
 
-+++
+---
 
 ### Taxonomy of Money
 
@@ -77,9 +77,10 @@ The taxonomy of money is based on four key properties:
 ![The money flower: example](assets/RrGtUA3.png)
 
 ---
+
 ### Basic Blockchain
 
-+++
+---
 
 ### Block
 
@@ -327,6 +328,8 @@ type Block struct {
 ```go
 func (b *Block) setHash() {
 	var hash []byte
+	target := big.NewInt(1)
+	target.Lsh(target, uint(256 - b.Bits))
 
 	for b.Nonce < math.MaxUint32 {
 		hash = b.calcHash()
@@ -338,18 +341,17 @@ func (b *Block) setHash() {
 	b.Hash = hash[:]
 }
 ```
-@[4]
-@[5]
-@[6](check if the hash is valid)
-@[9](if not.. increment nonce and calc again)
+@[3-4](256 - 24 = 232 -> 29 bytes)
+@[6]
+@[7]
+@[8-10](check if the hash is valid)
+@[11](if not.. increment nonce and calc again)
+@[12](set the hash)
 
 +++
 
 ```go
-func (b *Block) validateHash(hash []byte) bool {
-	target := big.NewInt(1)
-	target.Lsh(target, uint(256 - b.Bits))
-
+func (b *Block) validateHash(hash []byte, target bit.Int) bool {
 	var hashInt big.Int
 	hashInt.SetBytes(hash[:])
 	if hashInt.Cmp(target) == -1 {
@@ -358,9 +360,8 @@ func (b *Block) validateHash(hash []byte) bool {
 	return false
 }
 ```
-@[2-3](256 - 24 = 232 -> 29 bytes)
-@[5-6](hashInt is the integer representation of hash)
-@[7](hashInt need to be lower than target)
+@[2-3](hashInt is the integer representation of hash)
+@[4-6](hashInt need to be lower than target)
 +++
 
 #### Reward Payment

@@ -1,4 +1,4 @@
-package lean
+package main
 
 type Blockchain struct {
 	blocks       []*Block
@@ -10,9 +10,14 @@ func NewBlockchain() *Blockchain {
 	return &Blockchain{blocks: []*Block{genesis}}
 }
 
-func (bc *Blockchain) AddBlock(data string) {
+func (bc *Blockchain) MineBlock() {
+	txs := append(bc.transactions, Transaction{
+		Output: "reward payment",
+		Input:  "mywallet",
+		Value:  50,
+	})
 	prevBlock := bc.blocks[len(bc.blocks)-1]
-	newBlock := NewBlock(bc.transactions, prevBlock.Hash)
+	newBlock := NewBlock(txs, prevBlock.Hash)
 	bc.blocks = append(bc.blocks, newBlock)
 }
 

@@ -1,9 +1,10 @@
-package lean
+package main
 
 import (
 	"bytes"
 	"crypto/sha256"
 	"encoding/binary"
+	"fmt"
 	"io"
 	"math"
 	"math/big"
@@ -12,14 +13,17 @@ import (
 func (b *Block) PoW() {
 	var hash []byte
 
+	fmt.Println("mining...")
 	for b.Nonce < math.MaxUint32 {
 		hash = b.calcHash()
+		fmt.Printf("\rHash: %x", hash)
 		if b.validateHash(hash) {
 			break
 		}
 		b.Nonce++
 	}
 	b.Hash = hash[:]
+	fmt.Println("\n")
 }
 
 func (b *Block) calcHash() []byte {
@@ -56,5 +60,5 @@ func (b *Block) validateHash(hash []byte) bool {
 }
 
 func getTargetBits() uint32 {
-	return 24
+	return 20
 }
