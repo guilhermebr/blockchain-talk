@@ -346,7 +346,7 @@ func (b *Block) setHash() {
 @[7]
 @[8-10](check if the hash is valid)
 @[11](if not.. increment nonce and calc again)
-@[12](set the hash)
+@[13](set the hash)
 
 +++
 
