@@ -12,12 +12,14 @@ import (
 
 func (b *Block) PoW() {
 	var hash []byte
+	target := big.NewInt(1)
+	target.Lsh(target, uint(256-b.Bits))
 
 	fmt.Println("mining...")
 	for b.Nonce < math.MaxUint32 {
 		hash = b.calcHash()
 		fmt.Printf("\rHash: %x", hash)
-		if b.validateHash(hash) {
+		if b.validateHash(hash, target) {
 			break
 		}
 		b.Nonce++
@@ -47,10 +49,7 @@ func writeElement(w io.Writer, e interface{}) error {
 	return nil
 }
 
-func (b *Block) validateHash(hash []byte) bool {
-	target := big.NewInt(1)
-	target.Lsh(target, uint(256-b.Bits))
-
+func (b *Block) validateHash(hash []byte, target *big.Int) bool {
 	var hashInt big.Int
 	hashInt.SetBytes(hash[:])
 	if hashInt.Cmp(target) == -1 {

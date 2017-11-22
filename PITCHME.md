@@ -333,7 +333,7 @@ func (b *Block) setHash() {
 
 	for b.Nonce < math.MaxUint32 {
 		hash = b.calcHash()
-		if b.validateHash(hash) {
+		if b.validateHash(hash, target) {
 			break
 		}
 		b.Nonce++
@@ -351,7 +351,7 @@ func (b *Block) setHash() {
 +++
 
 ```go
-func (b *Block) validateHash(hash []byte, target bit.Int) bool {
+func (b *Block) validateHash(hash []byte, target *big.Int) bool {
 	var hashInt big.Int
 	hashInt.SetBytes(hash[:])
 	if hashInt.Cmp(target) == -1 {
