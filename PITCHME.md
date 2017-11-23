@@ -135,7 +135,7 @@ func (b *Block) setHash() {
 	b.Hash = hash[:]
 }
 ```
-@[2](Wolololo)
+@[2](Wololo)
 @[4-8](Put fields together to be hashed)
 @[10](Generate the SHA256 hash of the block)
 @[11]
