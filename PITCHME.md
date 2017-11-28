@@ -11,11 +11,11 @@
 
 Bitcoin is a Peer-to-Peer Electronic Cash System that uses a peer-to-peer network to solve the double-spending problem.
 
-+++
+---
 
 > “This system can be said to be a very specialised version of a cryptographically secure, transaction-based state machine”
 
-+++
+---
 
 ![Blockchain as Math](assets/RRPVcDr.png)
 
@@ -27,15 +27,15 @@ We define an electronic coin as a chain of digital signatures.
 
 Each owner transfers the coin to the next by digitally signing a hash of the previous transaction and the public key of the next owner and adding these to the end of the coin.
 
-+++
+---
 
 ![Blockchain](assets/Ji6bCJ8.jpg)
 
-+++
+---
 
 As most cases of overnight success, Bitcoin has 30+ years in the making.
 
-+++?image=assets/WjIt38I.jpg&size=auto 90%
+---?image=assets/WjIt38I.jpg&size=auto 90%
 
 ---
 
@@ -47,7 +47,7 @@ As most cases of overnight success, Bitcoin has 30+ years in the making.
 1. are not the liability of anyone
 1. and feature peer-to-peer exchange
 
-+++
+---
 
 Cash is peer-to-peer, but it is not electronic, and it is a Central Bank liability.
 
@@ -64,13 +64,13 @@ The taxonomy of money is based on four key properties:
 1. accessibility (universal or limited);
 1. and transfer mechanism (centralized or decentralized).
 
-+++
+---
 
 ### The money flower: taxonomy
 
 ![The money flower: taxonomy](assets/ohq97qM.png)
 
-+++
+---
 
 ### The money flower: example
 
@@ -97,7 +97,7 @@ type Block struct {
 @[4](Hash of the block)
 @[5](Valuable information)
 
-+++
+---
 
 #### New Block
 
@@ -117,7 +117,7 @@ func NewBlock(data string, prevBlockHash []byte) *Block {
 @[5](Data provided by user)
 @[6](Empty hash)
 
-+++
+---
 
 #### Hash
 
@@ -139,11 +139,11 @@ func (b *Block) setHash() {
 @[4-8](Put fields together to be hashed)
 @[10](Generate the SHA256 hash of the block)
 @[11]
-+++
+---
 
 ### Blockchain
 
-+++
+---
 
 ```go
 type Blockchain struct {
@@ -162,7 +162,7 @@ func (bc *Blockchain) AddBlock(data string) {
 @[7](Create a new block passing the hash of last block)
 @[8](Append new block to blockchain)
 
-+++
+---
 
 #### Genesis Block
 
@@ -184,7 +184,7 @@ func (bc *Blockchain) AddBlock(data string) {
 ```
 @[5-8](In the beginning God created the heaven and the earth...)
 @[6]
-+++
+---
 
 #### Bitcoin Genesis Block
 
@@ -210,13 +210,13 @@ block.nNonce   = 2083236893;
 ```
 @[2]("The Times 03/Jan/2009 Chancellor on brink of second bailout for banks")
 
-+++?image=assets/bitcoin_genesis.jpg&size=auto 90%
+---?image=assets/bitcoin_genesis.jpg&size=auto 90%
 
 ---
 
 ### Transactions
 
-+++
+---
 
 ```go
 type Transaction struct {
@@ -229,7 +229,7 @@ type Transaction struct {
 @[3](address that will receive the value)
 @[4](Amount transfered)
 
-+++
+---
 
 #### Refactoring
 
@@ -243,7 +243,7 @@ type Block struct {
 ```
 @[5](s/Data/Transactions)
 
-+++
+---
 
 #### Refactoring
 
@@ -260,7 +260,7 @@ func (bc *Blockchain) NewTransaction(tx Transaction) {
 @[3](Transactions to be added in the next block)
 @[6-8](Append transaction)
 
-+++
+---
 
 #### Refactoring
 
@@ -285,25 +285,25 @@ Cryptocurrencies utilize Distributed Ledger Technology (blockchain) to allow rem
 - No trusted intermediary clears and settles transactions |
 - Not exchanged via centralized infrastructures |
 
-+++
+---
 
 ### Proof-of-Work: <br>One CPU == One Vote
 
 **Proof-of-Work is implemented by incrementing a nonce in the block until a value is found that gives the block's hash the required zero bits.**
 
-+++
+---
 
 The network timestamps transactions by hashing them into an ongoing chain of hash-based proof-of-work, **forming a record that cannot be changed without redoing the proof-of-work.**
 
-+++
+---
 
 If a majority of CPU power is controlled by honest nodes, the honest chain will grow the fastest and outpace any competing chains.
 
-+++
+---
 
 To modify a past block, an attacker would have to redo the proof-of-work of the block and all blocks after it and then catch up with and surpass the work of the honest nodes.
 
-+++
+---
 
 #### Refactoring
 
@@ -321,7 +321,7 @@ type Block struct {
 @[6](the difficulty at which the block was mined)
 @[7](The nonce used to generate this block…)
 
-+++
+---
 
 #### Refactoring
 
@@ -348,7 +348,7 @@ func (b *Block) setHash() {
 @[11](if not.. increment nonce and calc again)
 @[13](set the hash)
 
-+++
+---
 
 ```go
 func (b *Block) validateHash(hash []byte, target *big.Int) bool {
@@ -362,7 +362,7 @@ func (b *Block) validateHash(hash []byte, target *big.Int) bool {
 ```
 @[2-3](hashInt is the integer representation of hash)
 @[4-6](hashInt need to be lower than target)
-+++
+---
 
 #### Reward Payment
 
@@ -386,7 +386,7 @@ func NewBlock(txs []Transaction, prevBlockHash []byte) *Block {
 ```
 @[2-6]([ $ ])
 
-+++
+---
 
 ```c
 // Genesis block
@@ -418,7 +418,7 @@ A Merkle tree is a hash based tree structure in which each leaf node is a hash o
 
 Once the latest transaction in a coin is buried under enough blocks, the spent transactions before it can be discarded to save disk space.
 
-+++
+---
 
 ![Merkle Tree](assets/HEQoPfD.png)
 
