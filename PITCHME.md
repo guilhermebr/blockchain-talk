@@ -1,7 +1,7 @@
 ### Understanding *Blockchain* with *Go*
 <br>
 <br>
-<span style="font-size: 50%">Guilherme Rezende - Globo.com</span>
+<span style="font-size: 50%">Guilherme Rezende - Globo.com/Tsuru</span>
 
 ---
 
