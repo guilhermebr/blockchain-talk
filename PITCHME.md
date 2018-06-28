@@ -449,9 +449,10 @@ func (w Wallet) GetAddress() []byte {
 
 ### Missing points
 
-1. merkle tree;
 1. smart contracts;
+1. merkle tree;
 1. p2p network;
+1. database;
 
 ---?image=assets/draw_horse.jpg&size=auto 90%
 
