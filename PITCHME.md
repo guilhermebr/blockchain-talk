@@ -453,11 +453,7 @@ func (w Wallet) GetAddress() []byte {
 1. smart contracts;
 1. p2p network;
 
----
-
-![Draw a horse](assets/draw_horse.jpg)
-
----
+---?image=assets/draw_horse.jpg&size=auto 90%
 
 ### Go Projects
 
