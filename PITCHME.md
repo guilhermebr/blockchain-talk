@@ -455,6 +455,8 @@ func (w Wallet) GetAddress() []byte {
 
 ---?image=assets/draw_horse.jpg&size=auto 90%
 
+---
+
 ### Go Projects
 
 - github.com/btcsuite/btcd
