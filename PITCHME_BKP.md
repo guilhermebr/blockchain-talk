@@ -2,20 +2,83 @@
 <br>
 <br>
 <span style="font-size: 50%">Guilherme Rezende - Globo.com</span>
+<br>
+<span style="font-size: 50%">Raphael Guarilha - Stone Pagamentos</span>
 
 ---
 
-> "Blockchain is the greatest innovation since the internet, will disrupt every industry that exists today."
+### What is Bitcoin?
+
+Bitcoin is a Peer-to-Peer Electronic Cash System that uses a peer-to-peer network to solve the double-spending problem.
 
 ---
 
-### What is Blockchain?
-
-Blockchain is a distributed and decentralized database, it's a way of storing records of value and transactions.
+> “This system can be said to be a very specialised version of a cryptographically secure, transaction-based state machine”
 
 ---
 
-### Why it's called blockchain?
+![Blockchain as Math](assets/RRPVcDr.png)
+
+---
+
+### The world-famous Blockchain
+
+We define an electronic coin as a chain of digital signatures.
+
+Each owner transfers the coin to the next by digitally signing a hash of the previous transaction and the public key of the next owner and adding these to the end of the coin.
+
+---
+
+![Blockchain](assets/Ji6bCJ8.jpg)
+
+---
+
+As most cases of overnight success, Bitcoin has 30+ years in the making.
+
+---?image=assets/WjIt38I.jpg&size=auto 90%
+
+---
+
+## Regulation
+
+3 key characteristics of cryptocurrencies:
+
+1. they are electronic
+1. are not the liability of anyone
+1. and feature peer-to-peer exchange
+
+---
+
+Cash is peer-to-peer, but it is not electronic, and it is a Central Bank liability.
+
+Commercial bank deposits are a liability of the bank that issues them.
+
+---
+
+### Taxonomy of Money
+
+The taxonomy of money is based on four key properties:
+
+1. issuer (central bank or other);
+1. form (electronic or physical);
+1. accessibility (universal or limited);
+1. and transfer mechanism (centralized or decentralized).
+
+---
+
+### The money flower: taxonomy
+
+![The money flower: taxonomy](assets/ohq97qM.png)
+
+---
+
+### The money flower: example
+
+![The money flower: example](assets/RrGtUA3.png)
+
+---
+
+### Basic Blockchain
 
 ---
 
@@ -76,6 +139,9 @@ func (b *Block) setHash() {
 @[4-8](Put fields together to be hashed)
 @[10](Generate the SHA256 hash of the block)
 @[11]
+---
+
+### Blockchain
 
 ---
 
@@ -120,7 +186,7 @@ func (bc *Blockchain) AddBlock(data string) {
 @[6]
 ---
 
-#### Bitcoin (Blockchain) Genesis Block
+#### Bitcoin Genesis Block
 
 ```c
 // Genesis block
@@ -148,7 +214,76 @@ block.nNonce   = 2083236893;
 
 ---
 
-### Mining
+### Transactions
+
+---
+
+```go
+type Transaction struct {
+   Output    string
+   Input      string
+   Value      int64
+}
+```
+@[2](where coins are actually stored)
+@[3](address that will receive the value)
+@[4](Amount transfered)
+
+---
+
+#### Refactoring
+
+```go
+type Block struct {
+   Timestamp    time.Time
+   PrevBlock    []byte
+   Hash         []byte
+   Transactions []Transaction
+}
+```
+@[5](s/Data/Transactions)
+
+---
+
+#### Refactoring
+
+```go
+type Blockchain struct {
+	blocks []*Block
+	transactions []Transaction
+}
+
+func (bc *Blockchain) NewTransaction(tx Transaction) {
+   bc.transactions = append(bc.transactions, tx)
+}
+```
+@[3](Transactions to be added in the next block)
+@[6-8](Append transaction)
+
+---
+
+#### Refactoring
+
+```go
+func NewBlock(txs []Transactions, prevBlockHash []byte) *Block {
+	return &Block{
+		Timestamp:      time.Unix(time.Now().Unix(), 0),
+		PrevBlock:      prevBlockHash,
+		Transactions:   txs,
+		Hash:           []byte{},
+	}
+}
+```
+@[5](s/Data/Transactions)
+
+---
+
+## Innovation
+
+Cryptocurrencies utilize Distributed Ledger Technology (blockchain) to allow remote peer-to-peer transfer of electronic value in the absence of trust between contracting parties.
+
+- No trusted intermediary clears and settles transactions |
+- Not exchanged via centralized infrastructures |
 
 ---
 
@@ -177,7 +312,7 @@ type Block struct {
 	Timestamp    time.Time
 	PrevBlock    []byte
 	Hash         []byte
-	Data        []byte
+	Transactions []Transaction
 	Bits         uint32
 	Nonce        uint32
 }
@@ -186,27 +321,6 @@ type Block struct {
 @[6](the difficulty at which the block was mined)
 @[7](The nonce used to generate this block…)
 
----
-#### Refactoring
-
-
-```go
-func (b *Block) calcHash() []byte {
-	header := new(bytes.Buffer)
-
-	header.Write(b.PrevBlock)
-  binary.Write(header, binary.BigEndian, b.Data)
-  binary.Write(header, binary.BigEndian, b.Timestamp.Unix())
-  binary.Write(header, binary.BigEndian, b.Bits)
-  binary.Write(header, binary.BigEndian, b.Nonce)
-
-	hash := sha256.Sum256(header.Bytes())
-	return hash[:]
-}
-```
-@[4]
-@[5-8]
-@[7-8]
 ---
 
 #### Refactoring
@@ -248,120 +362,17 @@ func (b *Block) validateHash(hash []byte, target *big.Int) bool {
 ```
 @[2-3](hashInt is the integer representation of hash)
 @[4-6](hashInt need to be lower than target)
-
----
-
-### Cryptocurrencies
-
----
-
-### What is Bitcoin?
-
-Bitcoin is a Peer-to-Peer Electronic Cash System that uses a peer-to-peer network to solve the double-spending problem.
-
----
-
-Bitcoin is a blockchain-based system, but blockchain is not a Bitcoin-based system.
-
----
-
-### Transactions
-
----?image=assets/transactions.png&size=auto 90%
-
----
-
-```go
-type Transaction struct {
-	ID      []byte
-	Inputs  []TXInput
-	Outputs []TXOutput
-}
-
-type TXOutput struct {
-	Value        int
-	PubKeyHash   []byte
-}
-
-type TXInput struct {
-	Txid      []byte
-	Output    int
-  Signature []byte
-	PubKey    []byte
-}
-```
-@[1-5](transaction have one or more inputs and outputs)
-@[7-10]
-@[8](where coins are actually stored)
-@[9](puzzle to unlock the output)
-@[12-16]
-@[13](id of a previous transaction that have the output to be spent)
-@[14](index of the output in the referenced transaction)
-@[15](data to the output puzzle)
-
----
-
-#### Refactoring
-
-```go
-type Block struct {
-   Timestamp    time.Time
-   PrevBlock    []byte
-   Hash         []byte
-   Transactions []Transaction
-}
-```
-@[5](s/Data/Transactions)
-
----
-
-#### Refactoring
-
-```go
-type Blockchain struct {
-	blocks []*Block
-	transactions []Transaction
-}
-
-func (bc *Blockchain) NewTransaction(tx Transaction) {
-   bc.transactions = append(bc.transactions, tx)
-}
-```
-@[3](Transactions waiting to be added in the next block)
-@[6-8](Append transaction)
-
----
-
-#### Refactoring
-
-```go
-func NewBlock(txs []Transactions, prevBlockHash []byte) *Block {
-	return &Block{
-		Timestamp:      time.Unix(time.Now().Unix(), 0),
-		PrevBlock:      prevBlockHash,
-		Transactions:   txs,
-		Hash:           []byte{},
-	}
-}
-```
-@[5](s/Data/Transactions)
-
----
-
-### Chicken or the Egg?
-
 ---
 
 #### Reward Payment
 
 ```go
 func NewBlock(txs []Transaction, prevBlockHash []byte) *Block {
-  txin := TXInput{[]byte{}, -1, "Reward to Satoshi"}
-	txout := TXOutput{50BTC, coinbase.PubKeyHash}
-	tx := Transaction{nil, []TXInput{txin}, []TXOutput{txout}}
-	tx.SetID()
-	txs = append(txs, tx)
-
+	txs = append(txs, Transaction{
+		Output: "reward payment",
+		Input:  "satoshi",
+		Value:  50,
+	})
 	block := &Block{
 		Timestamp:    time.Unix(time.Now().Unix(), 0),
 		PrevBlock:    prevBlockHash,
@@ -374,10 +385,6 @@ func NewBlock(txs []Transaction, prevBlockHash []byte) *Block {
 }
 ```
 @[2-6]([ $ ])
-@[2]
-@[3]
-@[6]([ $ ])
-
 
 ---
 
@@ -405,45 +412,6 @@ block.nNonce   = 2083236893;
 
 ---
 
-### Address
-
-```go
-type Wallet struct {
-	PrivateKey ecdsa.PrivateKey
-	PublicKey  []byte
-}
-
-func NewWallet() *Wallet {
-	private, public := newKeyPair()
-	wallet := Wallet{private, public}
-
-	return &wallet
-}
-
-func newKeyPair() (ecdsa.PrivateKey, []byte) {
-	curve := elliptic.P256()
-	private, err := ecdsa.GenerateKey(curve, rand.Reader)
-	pubKey := append(private.PublicKey.X.Bytes(), private.PublicKey.Y.Bytes()...)
-
-	return *private, pubKey
-}
-
-```
-
----
-
-```go
-func (w Wallet) GetAddress() []byte {
-	pubKeyHash := sha256.Sum256(w.PublicKey)
-
-	address := Base58Encode(pubKeyHash)
-
-	return address
-}
-```
-
----
-
 ### Merkle Tree: Reclaim disk space
 
 A Merkle tree is a hash based tree structure in which each leaf node is a hash of a block of data, and each non-leaf node is a hash of its children.
@@ -453,12 +421,6 @@ Once the latest transaction in a coin is buried under enough blocks, the spent t
 ---
 
 ![Merkle Tree](assets/HEQoPfD.png)
-
----
-
-```go
-Merkle tree code!!!
-```
 
 ---
 
@@ -476,3 +438,7 @@ Questions?
 ---
 
 Thank you
+<br>
+<span style="font-size: 50%">Guilherme Rezende - @gbrezende</span>
+<br>
+<span style="font-size: 50%">Raphael Guarilha - @guarilha</span>
