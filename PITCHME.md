@@ -195,18 +195,18 @@ func (b *Block) calcHash() []byte {
 	header := new(bytes.Buffer)
 
 	header.Write(b.PrevBlock)
-  binary.Write(header, binary.BigEndian, b.Data)
-  binary.Write(header, binary.BigEndian, b.Timestamp.Unix())
-  binary.Write(header, binary.BigEndian, b.Bits)
-  binary.Write(header, binary.BigEndian, b.Nonce)
+	binary.Write(header, binary.BigEndian, b.Data)
+	binary.Write(header, binary.BigEndian, b.Timestamp.Unix())
+	binary.Write(header, binary.BigEndian, b.Bits)
+	binary.Write(header, binary.BigEndian, b.Nonce)
 
 	hash := sha256.Sum256(header.Bytes())
 	return hash[:]
 }
 ```
-@[4]
-@[5-8]
-@[7-8]
+@[4](b.PrevBlock is []byte)
+@[5-8](binary.Write converts any to byte and append to header)
+@[7-8](fields used for PoW)
 ---
 
 #### Refactoring
@@ -267,7 +267,9 @@ Bitcoin is a blockchain-based system, but blockchain is not a Bitcoin-based syst
 
 ### Transactions
 
----?image=assets/transactions.png&size=auto 90%
+---
+
+![Transactions](assets/transactions.png)
 
 ---
 
@@ -286,7 +288,7 @@ type TXOutput struct {
 type TXInput struct {
 	Txid      []byte
 	Output    int
-  Signature []byte
+	Signature []byte
 	PubKey    []byte
 }
 ```
@@ -294,10 +296,11 @@ type TXInput struct {
 @[7-10]
 @[8](where coins are actually stored)
 @[9](puzzle to unlock the output)
-@[12-16]
+@[12-17]
 @[13](id of a previous transaction that have the output to be spent)
 @[14](index of the output in the referenced transaction)
-@[15](data to the output puzzle)
+@[15](data signed with privateKey)
+@[16](pubKey to be hashed and checked)
 
 ---
 
@@ -356,7 +359,7 @@ func NewBlock(txs []Transactions, prevBlockHash []byte) *Block {
 
 ```go
 func NewBlock(txs []Transaction, prevBlockHash []byte) *Block {
-  txin := TXInput{[]byte{}, -1, "Reward to Satoshi"}
+	txin := TXInput{[]byte{}, -1, "Reward to Satoshi"}
 	txout := TXOutput{50BTC, coinbase.PubKeyHash}
 	tx := Transaction{nil, []TXInput{txin}, []TXOutput{txout}}
 	tx.SetID()
@@ -414,22 +417,20 @@ type Wallet struct {
 }
 
 func NewWallet() *Wallet {
-	private, public := newKeyPair()
+	curve := elliptic.P256()
+	private, _ := ecdsa.GenerateKey(curve, rand.Reader)
+	pubKey := append(private.PublicKey.X.Bytes(), private.PublicKey.Y.Bytes()...)
 	wallet := Wallet{private, public}
 
 	return &wallet
 }
-
-func newKeyPair() (ecdsa.PrivateKey, []byte) {
-	curve := elliptic.P256()
-	private, err := ecdsa.GenerateKey(curve, rand.Reader)
-	pubKey := append(private.PublicKey.X.Bytes(), private.PublicKey.Y.Bytes()...)
-
-	return *private, pubKey
-}
-
 ```
-
+@[1-4]
+@[2](Bitcoin uses elliptic curves to generate private keys)
+@[3]
+@[6-13]
+@[7-8]
+@[9](in elliptic curve, public keys are points on a curve)
 ---
 
 ```go
@@ -441,24 +442,20 @@ func (w Wallet) GetAddress() []byte {
 	return address
 }
 ```
+@[2](publicKey hash)
+@[4](human-readable representation of a public key)
 
 ---
 
-### Merkle Tree: Reclaim disk space
+### Missing points
 
-A Merkle tree is a hash based tree structure in which each leaf node is a hash of a block of data, and each non-leaf node is a hash of its children.
-
-Once the latest transaction in a coin is buried under enough blocks, the spent transactions before it can be discarded to save disk space.
-
----
-
-![Merkle Tree](assets/HEQoPfD.png)
+1. merkle tree;
+1. smart contracts;
+1. p2p network;
 
 ---
 
-```go
-Merkle tree code!!!
-```
+![Draw a horse](assets/draw_horse.png)
 
 ---
 
