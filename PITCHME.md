@@ -455,7 +455,7 @@ func (w Wallet) GetAddress() []byte {
 
 ---
 
-![Draw a horse](assets/draw_horse.png)
+![Draw a horse](assets/draw_horse.jpg)
 
 ---
 
