@@ -15,7 +15,7 @@ Blockchain is a distributed and decentralized database, it's a way of storing re
 
 ---
 
-### Why it's called blockchain?
+### Why is it called blockchain?
 
 ---
 
