@@ -6,7 +6,7 @@ Guilherme Rezende @gbrezende
 
 Rafael Guarilha @guarilha
 
-see at: https://gitpitch.com/guilhermebr/blockchain-talk
+see at: https://gitpitch.herokuapp.com/guilhermebr/blockchain-talk
 
 ## example
 
